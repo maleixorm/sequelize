@@ -51,6 +51,23 @@ app.post('/users/create', async (req, res) => {
     res.redirect('/')
 })
 
+app.post('/address/create', async (req, res) => {
+    const UserId = req.body.UserId
+    const street = req.body.street
+    const number = req.body.number
+    const city = req.body.city
+
+    const address = {
+        UserId,
+        street,
+        number,
+        city
+    }
+
+    await Address.create(address)
+    res.redirect(`/users/edit/${UserId}`)
+})
+
 app.post('/users/update', async (req, res) => {
     const id = req.body.id
     const name = req.body.name
@@ -86,8 +103,8 @@ app.get('/', async (req, res) => {
 })
 
 conn
-//.sync()
-.sync({ force: true })
+.sync()
+//.sync({ force: true })
 .then(() => {
     app.listen(3000)
 })
