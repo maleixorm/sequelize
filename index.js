@@ -32,8 +32,12 @@ app.get('/users/:id', async (req, res) => {
 
 app.get('/users/edit/:id', async (req, res) => {
     const id = req.params.id
-    const user = await User.findOne({ raw: true, where: {id: id } })
-    res.render('useredit', { user })
+    try {
+        const user = await User.findOne({ include: Address, where: {id: id } })
+        res.render('useredit', { user: user.get({plain: true}) })
+    } catch (error) {
+        console.log(error)
+    }
 })
 
 app.post('/users/create', async (req, res) => {
